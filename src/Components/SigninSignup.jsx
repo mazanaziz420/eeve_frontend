@@ -150,6 +150,7 @@ const Login = () => {
       });
       toast.success('Login successful');
       localStorage.setItem('token', response.data.token);
+      localStorage.setItem('user', JSON.stringify(response.data.user));
       navigate('/');
     } catch (err) {
       // Check if the error response is available

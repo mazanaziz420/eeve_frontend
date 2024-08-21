@@ -8,16 +8,21 @@ const VenueProviderDashboard = () => {
   const [bookings, setBookings] = useState([]);
   const history = useNavigate();
   const isAuthenticated = !!localStorage.getItem('token');
+  const token = localStorage.getItem('token');
+  const user = JSON.parse(localStorage.getItem('user'));
 
   useEffect(() => {
-
     if (!isAuthenticated) {
       history("/login");
     }
 
     const fetchVenues = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/venueProvider/get/makeups');
+        const response = await axios.get('http://localhost:5000/venueProvider/get/makeups', {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
         console.log('Venues: ', response.data);
         setVenues(response.data);
       } catch (error) {
@@ -31,11 +36,15 @@ const VenueProviderDashboard = () => {
 
     fetchVenues();
     fetchBookings();
-  }, []);
+  }, [isAuthenticated, history, token]);
 
   const handleDeleteVenue = async (id) => {
     try {
-      await axios.delete(`http://localhost:5000/venueProvider/${id}`);
+      await axios.delete(`http://localhost:5000/venueProvider/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
       setVenues(venues.filter(venue => venue._id !== id));
     } catch (error) {
       console.error('Error deleting venue:', error);
@@ -106,8 +115,8 @@ const VenueProviderDashboard = () => {
       <section className="mb-6">
         <h2 className="text-xl font-semibold mb-3">Profile Management</h2>
         <div className="bg-white p-4 rounded shadow">
-          <p className="text-gray-600">Name: Sarah Connor</p>
-          <p className="text-gray-600">Email: sarah.connor@example.com</p>
+          <p className="text-gray-600">Name: {user?.full_name}</p>
+          <p className="text-gray-600">Email: {user?.email}</p>
           <button className="mt-2 bg-yellow-500 text-white px-4 py-2 rounded">Edit Profile</button>
         </div>
       </section>
