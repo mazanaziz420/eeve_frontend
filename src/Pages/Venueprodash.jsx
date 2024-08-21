@@ -18,7 +18,7 @@ const VenueProviderDashboard = () => {
 
     const fetchVenues = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/venueProvider/get/makeups', {
+        const response = await axios.get('https://evee-backend.vercel.app/venueProvider/get/makeups', {
           headers: {
             Authorization: `Bearer ${token}`
           }
@@ -40,7 +40,7 @@ const VenueProviderDashboard = () => {
 
   const handleDeleteVenue = async (id) => {
     try {
-      await axios.delete(`http://localhost:5000/venueProvider/${id}`, {
+      await axios.delete(`https://evee-backend.vercel.app/venueProvider/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`
         }
